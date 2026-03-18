@@ -42,7 +42,7 @@ jobs:
           NAME: ${{ inputs.packageName }}
           VERSION: ${{ inputs.packageVersion }}
         run: |
-          mkdir -p packages
+          mkdir -p package
           az artifacts universal download \
             --organization "$ORG"\
             --project "$PROJ"\
@@ -50,7 +50,7 @@ jobs:
             --feed "$FEED" \
             --name "$NAME" \
             --version "$VERSION" \
-            --path packages
+            --path package
           echo "Downloaded to $(pwd)/packages"
           ls -la packages
       - name: Upload downloaded package as an artifact
