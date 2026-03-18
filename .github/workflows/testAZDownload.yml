@@ -26,16 +26,12 @@ jobs:
           # Either of these works; doing both is safe:
           echo "$AZDO_PKEY" | az devops login --organization "${{ secrets.AZDO_ORG }}"
           # Also export the special env var read by the DevOps extension
-          #echo "AZURE_DEVOPS_EXT_PAT=$AZDO_PKEY" >> $GITHUB_ENV
-          echo "AZURE_DEVOPS_EXT_PAT=${{ secrets.AZDO_PKEY }}" >> $GITHUB_ENV
-          
+          echo "AZURE_DEVOPS_EXT_PAT=$AZDO_PKEY" >> $GITHUB_ENV
       - name: Configure Azure DevOps
         env:
           AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZDO_PKEY }}
-         
         run: |
           az devops configure --defaults organization="${{ secrets.AZDO_ORG }}" project="${{ secrets.AZDO_PROJECT }}"
-
       - name: Download Universal package
         env:
           PROJ: ${{ secrets.AZDO_PROJECT }}
@@ -45,11 +41,11 @@ jobs:
           VERSION: ${{ inputs.packageVersion }}
         run: |
           mkdir -p packages
-          
           az artifacts universal download \
-            --project "${PROJ}"\
+            --organization "https://dev.azure.com/MandS-V2-Production-Enterprise-Services" \
+            --project "Enterprise Service" \
             --scope project \
-            --feed "$FEED"  \
+            --feed "ACE1"  \
             --name "$NAME" \
             --version "$VERSION" \
             --path packages
