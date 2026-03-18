@@ -21,12 +21,12 @@ jobs:
       
       - name: Authenticate to Azure DevOps (PAT)
         env:
-          AZDO_PAT: ${{ secrets.AZDO_PKEY }}
+          AZDO_PKEY: ${{ secrets.AZDO_PKEY }}
         run: |
           # Either of these works; doing both is safe:
-          echo "$AZDO_PAT" | az devops login --organization "${{ secrets.AZDO_ORG }}"
+          echo "$AZDO_PKEY" | az devops login --organization "${{ secrets.AZDO_ORG }}"
           # Also export the special env var read by the DevOps extension
-          echo "AZURE_DEVOPS_EXT_PAT=$AZDO_PAT" >> $GITHUB_ENV
+          echo "AZURE_DEVOPS_EXT_PAT=$AZDO_PKEY" >> $GITHUB_ENV
 
       - name: Configure Azure DevOps
         env:
