@@ -50,7 +50,7 @@ jobs:
             --feed "$FEED" \
             --name "$NAME" \
             --version "$VERSION" \
-            --path .
+            --path packages
             
       - name: Upload downloaded package as an artifact
         uses: actions/upload-artifact@v4
