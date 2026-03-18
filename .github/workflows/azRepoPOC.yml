@@ -49,8 +49,7 @@ jobs:
             --scope project\
             --feed "$FEED" \
             --name "$NAME" \
-            --version "$VERSION" \
-            --path packages
+            --version "$VERSION"
             
       - name: Upload downloaded package as an artifact
         uses: actions/upload-artifact@v4
