@@ -1,0 +1,41 @@
+name: Download Azure Artifacts Universal Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      packageName:
+        description: 'Universal package name'
+        required: true
+      packageVersion:
+        description: 'Version (e.g., 1.2.3 or 1.2.* if you resolve it yourself)'
+        required: true
+
+jobs:
+  download-universal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Azure CLI + DevOps extension
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+          az extension add -n azure-devops
+
+      - name: Configure Azure DevOps
+        env:
+          AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZDO_PAT }}
+        run: |
+          az devops configure --defaults organization="${{ secrets.AZDO_ORG }}" project="${{ secrets.AZDO_PROJECT }}"
+
+      - name: Download Universal package
+        env:
+          FEED: ${{ secrets.AZDO_FEED }}
+          NAME: ${{ inputs.packageName }}
+          VERSION: ${{ inputs.packageVersion }}
+        run: |
+          mkdir -p packages
+          az artifacts universal download \
+            --feed "$FEED" \
+            --name "$NAME" \
+            --version "$VERSION" \
+            --path packages
+          echo "Downloaded to $(pwd)/packages"
+          ls -la packages
