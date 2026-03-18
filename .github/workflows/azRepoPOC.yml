@@ -51,8 +51,8 @@ jobs:
             --name "$NAME" \
             --version "$VERSION" \
             --path package
-          echo "Downloaded to $(pwd)/packages"
-          ls -la packages
+          echo "Downloaded to $(pwd)/package"
+          ls -la package
       - name: Upload downloaded package as an artifact
         uses: actions/upload-artifact@v4
         with:
