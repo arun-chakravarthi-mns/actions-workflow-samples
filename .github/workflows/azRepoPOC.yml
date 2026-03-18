@@ -53,3 +53,10 @@ jobs:
             --path packages
           echo "Downloaded to $(pwd)/packages"
           ls -la packages
+      - name: Upload downloaded package as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: universal-package
+          path: packages/        # <-- the folder you used in az artifacts universal download --path
+          if-no-files-found: error
+          retention-days: 30     # adjust as per your org’s policy
