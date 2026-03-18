@@ -36,12 +36,17 @@ jobs:
 
       - name: Download Universal package
         env:
+          PROJ: ${{ secrets.AZDO_PROJECT }}
+          ORG: ${{ secrets.AZDO_ORG }}
           FEED: ${{ secrets.AZDO_FEED }}
           NAME: ${{ inputs.packageName }}
           VERSION: ${{ inputs.packageVersion }}
         run: |
           mkdir -p packages
           az artifacts universal download \
+            --organization "$ORG"\
+            --project "$PROJ"\
+            --scope project\
             --feed "$FEED" \
             --name "$NAME" \
             --version "$VERSION" \
