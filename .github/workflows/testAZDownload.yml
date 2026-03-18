@@ -1,4 +1,4 @@
-name: Download Azure Artifacts Universal Package (project-scoped)
+name: Download Azure Artifacts Universal Package (project-scoped) - test
 
 on:
   workflow_dispatch:
