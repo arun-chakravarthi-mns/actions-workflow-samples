@@ -1,0 +1,73 @@
+name: Download Azure Artifacts Universal Package (project-scoped)
+
+on:
+  workflow_dispatch:
+    inputs:
+      packageName:
+        description: 'Universal package name'
+        required: true
+      packageVersion:
+        description: 'Exact version (e.g., 1.2.3)'
+        required: true
+
+jobs:
+  download-universal:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Azure CLI + DevOps extension
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+          az extension add -n azure-devops
+
+      - name: Authenticate to Azure DevOps (PAT)
+        env:
+          AZDO_PKEY: ${{ secrets.AZDO_PKEY }}
+        run: |
+          echo "$AZDO_PKEY" | az devops login --organization "${{ secrets.AZDO_ORG }}"
+          echo "AZURE_DEVOPS_EXT_PAT=$AZDO_PKEY" >> $GITHUB_ENV
+
+      - name: Configure Azure DevOps defaults
+        run: |
+          az devops configure --defaults organization="${{ secrets.AZDO_ORG }}" project="${{ secrets.AZDO_PROJECT }}"
+          az devops configure --list
+
+      - name: Validate inputs (no colon in name, exact version)
+        run: |
+          NAME="${{ inputs.packageName }}"
+          VERSION="${{ inputs.packageVersion }}"
+          if [[ "$NAME" == *:* ]]; then
+            echo "❌ ERROR: Universal package names cannot contain ':'"
+            exit 1
+          fi
+          if [[ -z "$VERSION" || "$VERSION" == *"*"* ]]; then
+            echo "❌ ERROR: Provide an exact version (SemVer) for universal download (no wildcards)."
+            exit 1
+          fi
+
+      - name: Download Universal package (project-scoped)
+        env:
+          PROJ: ${{ secrets.AZDO_PROJECT }}
+          FEED: ${{ secrets.AZDO_FEED }}
+          NAME: ${{ inputs.packageName }}
+          VERSION: ${{ inputs.packageVersion }}
+        run: |
+          mkdir -p packages
+          az artifacts universal download \
+            --project "$PROJ" \
+            --scope project \
+            --feed "$FEED" \
+            --name "$NAME" \
+            --version "$VERSION" \
+            --path packages \
+            --only-show-errors
+          echo "Downloaded to $(pwd)/packages"
+          ls -la packages
+
+      - name: Upload downloaded package as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: universal-package-${{ inputs.packageName }}-${{ inputs.packageVersion }}
+          path: packages/
+          if-no-files-found: error
+          retention-days: 30
