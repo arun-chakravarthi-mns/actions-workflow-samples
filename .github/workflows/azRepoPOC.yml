@@ -48,8 +48,8 @@ jobs:
             --project "$PROJ" \
             --scope project \
             --feed "$FEED"  \
-            --name "test.bar" \
-            --version "0.0.1" \
+            --name "$NAME" \
+            --version "$VERSION" \
             --path packages
             
       - name: Upload downloaded package as an artifact
