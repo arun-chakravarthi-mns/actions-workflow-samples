@@ -45,7 +45,7 @@ jobs:
             --organization "$ORG" \
             --project "$PROJ" \
             --scope project \
-            --feed "ACE1"  \
+            --feed "$FEED"  \
             --name "$NAME" \
             --version "$VERSION" \
             --path packages
