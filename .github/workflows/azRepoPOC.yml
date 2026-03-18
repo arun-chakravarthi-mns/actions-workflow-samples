@@ -44,10 +44,10 @@ jobs:
         run: |
           mkdir -p packages
           az artifacts universal download \
-            --organization "https://dev.azure.com/MandS-V2-Production-Enterprise-Services"\
-            --project "Enterprise Service"\
-            --scope project\
-            --feed "ACE1" \
+            --organization "https://dev.azure.com/MandS-V2-Production-Enterprise-Services" \
+            --project "Enterprise Service" \
+            --scope project \
+            --feed "ACE1"  \
             --name "$NAME" \
             --version "$VERSION" \
             --path packages
