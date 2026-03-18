@@ -50,7 +50,7 @@ jobs:
           --project="Enterprise Service" \
           --scope project \
           --feed ACE1 \
-          --name my-first-package \
+          --name test.bar \
           --version 0.0.1 \
           --path packages
           
