@@ -42,7 +42,7 @@ jobs:
           NAME: ${{ inputs.packageName }}
           VERSION: ${{ inputs.packageVersion }}
         run: |
-          mkdir -p packages
+          #mkdir -p packages
           az artifacts universal download \
             --organization "$ORG"\
             --project "$PROJ"\
