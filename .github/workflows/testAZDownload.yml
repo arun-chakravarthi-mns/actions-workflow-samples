@@ -43,7 +43,7 @@ jobs:
           mkdir -p packages
           az artifacts universal download \
             --organization "$ORG" \
-            --project "Enterprise Service" \
+            --project "$PROJ" \
             --scope project \
             --feed "ACE1"  \
             --name "$NAME" \
