@@ -44,13 +44,23 @@ jobs:
           VERSION: ${{ inputs.packageVersion }}
         run: |
           mkdir -p packages
+
           az artifacts universal download \
-            --project "${PROJ}"\
-            --scope project \
-            --feed "$FEED"  \
-            --name "$NAME" \
-            --version "$VERSION" \
-            --path packages
+          --organization https://dev.azure.com/MandS-V2-Production-Enterprise-Services/ \
+          --project="Enterprise Service" \
+          --scope project \
+          --feed ACE1 \
+          --name my-first-package \
+          --version 0.0.1 \
+          --path packages
+          
+          #az artifacts universal download \
+          #  --project "${PROJ}"\
+          #  --scope project \
+          #  --feed "$FEED"  \
+          #  --name "$NAME" \
+          #  --version "$VERSION" \
+          #  --path packages
             
       - name: Upload downloaded package as an artifact
         uses: actions/upload-artifact@v4
