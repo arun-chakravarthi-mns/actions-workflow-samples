@@ -32,6 +32,7 @@ jobs:
       - name: Configure Azure DevOps
         env:
           AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZDO_PKEY }}
+          AZURE_DEVOPS_EXT_ARTIFACTTOOL_PATVAR:  ${{ secrets.AZDO_PKEY }}
         run: |
           az devops configure --defaults organization="${{ secrets.AZDO_ORG }}" project="${{ secrets.AZDO_PROJECT }}"
 
