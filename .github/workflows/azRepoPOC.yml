@@ -45,7 +45,6 @@ jobs:
           mkdir -p packages
           az artifacts universal download \
             --organization "$ORG" \
-            --scope project \
             --feed "$FEED"  \
             --name "$NAME" \
             --version "$VERSION" \
