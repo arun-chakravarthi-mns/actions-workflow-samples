@@ -27,7 +27,7 @@ jobs:
           echo "$AZDO_PKEY" | az devops login --organization "${{ secrets.AZDO_ORG }}"
           # Also export the special env var read by the DevOps extension
           #echo "AZURE_DEVOPS_EXT_PAT=$AZDO_PKEY" >> $GITHUB_ENV
-          echo "AZURE_DEVOPS_EXT_PAT=${{ secrets.AZDO_PAT }}" >> $GITHUB_ENV
+          echo "AZURE_DEVOPS_EXT_PAT=${{ secrets.AZDO_PKEY }}" >> $GITHUB_ENV
           
       - name: Configure Azure DevOps
         env:
