@@ -42,7 +42,7 @@ jobs:
           NAME: ${{ inputs.packageName }}
           VERSION: ${{ inputs.packageVersion }}
         run: |
-          mkdir -p package
+          mkdir -p packages
           az artifacts universal download \
             --organization "$ORG"\
             --project "$PROJ"\
@@ -50,13 +50,7 @@ jobs:
             --feed "$FEED" \
             --name "$NAME" \
             --version "$VERSION" \
-            --path package
-          echo "Downloaded to $(pwd)/package"
-          ls -la package
-      - name: Upload downloaded package as an artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: universal-package
-          path: packages/        # <-- the folder you used in az artifacts universal download --path
-          if-no-files-found: error
-          retention-days: 30     # adjust as per your org’s policy
+            --path packages
+          echo "Downloaded to $(pwd)/packages"
+          ls -la packages
+          
