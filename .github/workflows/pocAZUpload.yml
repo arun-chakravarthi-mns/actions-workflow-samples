@@ -1,0 +1,51 @@
+name: Publish Universal Package to Azure Artifacts
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  ORG: ${{ vars.AZURE_ORG }}
+  PROJECT: ${{ vars.AZURE_PROJECT }}
+  FEED: ${{ vars.AZURE_FEED }}
+  PACKAGE_NAME: my-universal-bundle
+  PACKAGE_VERSION: 1.0.${{ github.run_number }}
+
+jobs:
+  universal_publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Prepare the folder to publish (replace with your build output)
+      - name: Build output
+        run: |
+          mkdir -p out
+          echo "Hello $(date)" > out/info.txt
+
+      - name: Install Azure CLI & DevOps extension
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y azure-cli
+          az extension add -n azure-devops
+
+      - name: Azure DevOps login (PAT)
+        env:
+          AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
+        run: |
+          az devops configure --defaults organization="https://dev.azure.com/${{ env.ORG }}" project="${{ env.PROJECT }}"
+
+      - name: Publish Universal Package
+        env:
+          AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
+        run: |
+          az artifacts universal publish \
+            --organization "https://dev.azure.com/${ORG}" \
+            --project "${PROJECT}" \
+            --feed "${FEED}" \
+            --name "${PACKAGE_NAME}" \
+            --version "${PACKAGE_VERSION}" \
+            --description "Published from GitHub Actions run $GITHUB_RUN_NUMBER" \
+            --path out
