@@ -43,7 +43,7 @@ jobs:
         run: |
           az artifacts universal publish \
             --organization "${ORG}" \
-            --project "${PROJECT}" \
+            --project "${{ vars.AZDO_PROJECT }}" \
             --feed "${FEED}" \
             --name "${PACKAGE_NAME}" \
             --version "${PACKAGE_VERSION}" \
