@@ -1,0 +1,55 @@
+name: Deploy Artifact
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Artifact version to deploy"
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      PROJ: ${{ vars.AZDO_PROJECT }}
+      ORG: ${{ vars.AZDO_ORG }}
+      FEED: ${{ vars.AZDO_FEED }}
+      PACKAGE_NAME: rollback-test
+
+    steps:
+    - name: Install Azure DevOps CLI
+      run: az extension add --name azure-devops
+
+    - name: Download artifact
+      env:
+        AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
+      run: |
+        az artifacts universal download \
+          --organization "$AZDO_ORG_URL" \
+          --project "$AZDO_PROJECT" \
+          --feed "$AZDO_FEED" \
+          --name "$PACKAGE_NAME" \
+          --version "${{ inputs.version }}" \
+          --path deploy
+
+    # Simulated deployment
+    - name: Deploy
+      run: |
+        echo "Deploying version..."
+        cat deploy/version.txt
+
+        # Simulate failure for specific version
+        if [[ "${{ inputs.version }}" == *"2" ]]; then
+          echo "Deployment failed!"
+          exit 1
+        fi
+
+        echo "${{ inputs.version }}" > last_successful_version.txt
+
+    - name: Save last successful version
+      if: success()
+      uses: actions/upload-artifact@v4
+      issue: |
+        name: last-good
+        path: last_successful_version.txt
