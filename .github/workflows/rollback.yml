@@ -1,0 +1,39 @@
+name: Rollback Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      rollback_version:
+        description: "Version to rollback to"
+        required: true
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+
+    env:
+      PROJ: ${{ vars.AZDO_PROJECT }}
+      ORG: ${{ vars.AZDO_ORG }}
+      FEED: ${{ vars.AZDO_FEED }}
+      PACKAGE_NAME: rollback-test
+
+    steps:
+    - name: Install Azure DevOps CLI
+      run: az extension add --name azure-devops
+
+    - name: Download rollback artifact
+      env:
+        AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
+      run: |
+        az artifacts universal download \
+          --organization "$ORG" \
+          --project "$PROJ" \
+          --feed "$FEED" \
+          --name "$PACKAGE_NAME" \
+          --version "${{ inputs.rollback_version }}" \
+          --path rollback
+
+    - name: Rollback deployment
+      run: |
+        echo "Rolling back to:"
+        cat rollback/version.txt
