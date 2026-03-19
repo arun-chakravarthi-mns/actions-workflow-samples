@@ -42,10 +42,10 @@ jobs:
         run: |
           mkdir -p packages
           az artifacts universal download \
-            --organization "$ORG" \
-            --project "$PROJ" \
+            --organization ${{ vars.AZDO_ORG }} \
+            --project "${{ vars.AZDO_PROJECT }}" \
             --scope project \
-            --feed "$FEED"  \
+            --feed ${{ vars.AZDO_FEED }}  \
             --name "$NAME" \
             --version "$VERSION" \
             --path packages
