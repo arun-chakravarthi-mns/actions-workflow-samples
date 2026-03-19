@@ -45,7 +45,7 @@ jobs:
             --organization "${ORG}" \
             --project "${{ vars.AZDO_PROJECT }}" \
             --scope project
-            --feed "${FEED}" \
+            --feed "${vars.AZDO_FEED}" \
             --name "${PACKAGE_NAME}" \
             --version "${PACKAGE_VERSION}" \
             --description "Published from GitHub Actions run $GITHUB_RUN_NUMBER" \
