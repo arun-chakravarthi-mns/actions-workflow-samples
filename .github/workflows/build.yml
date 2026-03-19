@@ -1,0 +1,39 @@
+name: Build and Publish Artifact
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      PROJ: ${{ vars.AZDO_PROJECT }}
+      ORG: ${{ vars.AZDO_ORG }}
+      FEED: ${{ vars.AZDO_FEED }}      
+      PACKAGE_NAME: rollback-test
+      VERSION: 1.0.${{ github.run_number }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Prepare artifact
+      run: |
+        mkdir artifact
+        echo "Build version $VERSION" > artifact/version.txt
+
+    - name: Install Azure DevOps CLI
+      run: az extension add --name azure-devops
+
+    - name: Publish artifact
+      env:
+        AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
+      run: |
+        az artifacts universal publish \
+          --organization "$ORG" \
+          --project "$PROJ" \
+          --feed "$FEED" \
+          --name "$PACKAGE_NAME" \
+          --version "$VERSION" \
+          --path artifact
