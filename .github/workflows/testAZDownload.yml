@@ -31,10 +31,10 @@ jobs:
         env:
           AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZDO_PKEY }}
         run: |
-          az devops configure --defaults organization="${{ secrets.AZDO_ORG }}" project="${{ secrets.AZDO_PROJECT }}"
+          az devops configure --defaults organization="${{ vars.AZDO_ORG }}" project="${{ vars.AZDO_PROJECT }}"
       - name: Download Universal package
         env:
-          PROJ: ${{ secrets.AZDO_PROJECT }}
+          PROJ: ${{ vars.AZDO_PROJECT }}
           ORG: ${{ vars.AZDO_ORG }}
           FEED: ${{ vars.AZDO_FEED }}
           NAME: ${{ inputs.packageName }}
