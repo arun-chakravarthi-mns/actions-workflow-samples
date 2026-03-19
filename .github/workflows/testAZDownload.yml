@@ -35,7 +35,7 @@ jobs:
       - name: Download Universal package
         env:
           PROJ: ${{ secrets.AZDO_PROJECT }}
-          ORG: ${{ secrets.AZDO_ORG }}
+          ORG: ${{ vars.AZDO_ORG }}
           FEED: ${{ vars.AZDO_FEED }}
           NAME: ${{ inputs.packageName }}
           VERSION: ${{ inputs.packageVersion }}
