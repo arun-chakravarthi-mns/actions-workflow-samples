@@ -26,9 +26,9 @@ jobs:
         AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
       run: |
         az artifacts universal download \
-          --organization "$AZDO_ORG_URL" \
-          --project "$AZDO_PROJECT" \
-          --feed "$AZDO_FEED" \
+          --organization "$ORG" \
+          --project "$PROJ" \
+          --feed "$FEED" \
           --name "$PACKAGE_NAME" \
           --version "${{ inputs.version }}" \
           --path deploy
