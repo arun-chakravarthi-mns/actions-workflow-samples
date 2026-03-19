@@ -7,9 +7,9 @@ permissions:
   contents: read
 
 env:
-  ORG: ${{ vars.AZURE_ORG }}
-  PROJECT: ${{ vars.AZURE_PROJECT }}
-  FEED: ${{ vars.AZURE_FEED }}
+  ORG: ${{ vars.AZDO_ORG }}
+  PROJECT: ${{ vars.AZDO_PROJECT }}
+  FEED: ${{ vars.AZDO_FEED }}
   PACKAGE_NAME: my-universal-bundle
   PACKAGE_VERSION: 1.0.${{ github.run_number }}
 
@@ -33,13 +33,13 @@ jobs:
 
       - name: Azure DevOps login (PAT)
         env:
-          AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
+          AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZDO_PKEY }}
         run: |
           az devops configure --defaults organization="https://dev.azure.com/${{ env.ORG }}" project="${{ env.PROJECT }}"
 
       - name: Publish Universal Package
         env:
-          AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
+          AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZDO_PKEY }}
         run: |
           az artifacts universal publish \
             --organization "https://dev.azure.com/${ORG}" \
