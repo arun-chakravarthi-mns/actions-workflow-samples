@@ -36,7 +36,7 @@ jobs:
         env:
           PROJ: ${{ secrets.AZDO_PROJECT }}
           ORG: ${{ secrets.AZDO_ORG }}
-          FEED: ${{ secrets.AZDO_FEED }}
+          FEED: ${{ vars.AZDO_FEED }}
           NAME: ${{ inputs.packageName }}
           VERSION: ${{ inputs.packageVersion }}
         run: |
