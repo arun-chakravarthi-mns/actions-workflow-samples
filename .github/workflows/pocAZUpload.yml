@@ -44,7 +44,7 @@ jobs:
           az artifacts universal publish \
             --organization "${ORG}" \
             --project "${{ vars.AZDO_PROJECT }}" \
-            --scope project
+            --scope project \
             --feed "${vars.AZDO_FEED}" \
             --name "${PACKAGE_NAME}" \
             --version "${PACKAGE_VERSION}" \
